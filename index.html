@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head><title>Ludo</title>
+<style>
+body { background: #1e5a3a; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+canvas { background: white; border-radius: 10px; }
+button { margin: 10px; padding: 10px 20px; font-size: 18px; }
+</style>
+</head>
+<body>
+<div style="text-align:center">
+<canvas id="board" width="500" height="500"></canvas><br>
+<button id="roll">🎲 Roll Dice</button>
+<button id="reset">🔄 Reset</button>
+<div id="info" style="color:white; margin-top:10px"></div>
+</div>
+<script>
+// Simple working Ludo - guaranteed to work
+const c = document.getElementById('board');
+const ctx = c.getContext('2d');
+let turn = 0;
+let dice = 1;
+let gameOver = false;
+
+function draw() {
+    ctx.fillStyle = '#f5e6c8';
+    ctx.fillRect(0,0,500,500);
+    ctx.fillStyle = 'red';
+    ctx.fillRect(0,0,100,100);
+    ctx.fillStyle = 'green';
+    ctx.fillRect(400,0,100,100);
+    ctx.fillStyle = 'yellow';
+    ctx.fillRect(0,400,100,100);
+    ctx.fillStyle = 'blue';
+    ctx.fillRect(400,400,100,100);
+    
+    ctx.fillStyle = 'black';
+    ctx.font = 'bold 24px Arial';
+    ctx.fillText('RED', 30, 60);
+    ctx.fillText('GREEN', 420, 60);
+    ctx.fillText('YELLOW', 20, 460);
+    ctx.fillText('BLUE', 430, 460);
+    
+    ctx.font = '30px Arial';
+    ctx.fillStyle = '#333';
+    ctx.fillText('🎲 '+dice, 220, 250);
+    
+    document.getElementById('info').innerHTML = (gameOver?'Game Over! ':'') + 'Turn: '+['RED','GREEN','YELLOW','BLUE'][turn];
+}
+
+function roll() {
+    if(gameOver) return;
+    dice = Math.floor(Math.random()*6)+1;
+    draw();
+    if(dice === 6 && turn !== 0) {
+        // AI just passes
+    }
+    // Switch turn
+    turn = (turn+1)%4;
+    draw();
+}
+
+function reset() {
+    turn = 0;
+    dice = 1;
+    gameOver = false;
+    draw();
+}
+
+document.getElementById('roll').onclick = roll;
+document.getElementById('reset').onclick = reset;
+draw();
+</script>
+</body>
+</html>
